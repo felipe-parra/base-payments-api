@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shoping Cart - Example</title>
+    <style>
+      button {
+        max-width: 300px;
+        margin: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Shopping Cart</h1>
+      <section style="display: flex; flex-direction: column">
+        <button id="stripe-pay">Pay with Stripe</button>
+        <button id="paypal-pay">Pay with PayPal</button>
+        <button id="mercadopago-pay">Pay with MercadoPago</button>
+      </section>
+    </main>
+
+    <script>
+      const stripeButton = document.getElementById("stripe-pay");
+      const paypalButton = document.getElementById("paypal-pay");
+      const mercadopagoButton = document.getElementById("mercadopago-pay");
+
+      stripeButton.addEventListener("click", () => {
+        fetch(`${window.location.origin}/stripe/payment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            items: [
+              {
+                price_data: {
+                  currency: "mxn",
+                  product_data: {
+                    name: "T-shirt",
+                  },
+                  unit_amount: 149000,
+                },
+                quantity: 1,
+              },
+            ],
+          }),
+        })
+          .then((res) => res.json())
+          .then(({ url }) => {
+            window.location.href = url;
+          })
+          .catch((err) => {
+            console.error({ err });
+          });
+      });
+
+      paypalButton.addEventListener("click", () => {
+        fetch(`${window.location.origin}/paypal/payment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: 1000,
+            currency: "usd",
+            description: "Example charge",
+            source: "tok_visa",
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log({ data });
+          })
+          .catch((err) => {
+            console.error({ err });
+          });
+      });
+
+      mercadopagoButton.addEventListener("click", () => {
+        fetch(`${window.location.origin}/mercadopago/payment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: 1000,
+            currency: "usd",
+            description: "Example charge",
+            source: "tok_visa",
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log({ data });
+          })
+          .catch((err) => {
+            console.error({ err });
+          });
+      });
+    </script>
+  </body>
+</html>

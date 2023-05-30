@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "none",
+    "useTabs": false,
+    "tabWidth": 2,
+    "jsxSingleQuote": true
+  }
+}
